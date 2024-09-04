@@ -1,0 +1,39 @@
+@import '../../styles/variables.scss';
+
+.headerWrapper {
+  background-color: $background-color-base;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1440px;
+  height: 80px;
+  margin: 0 auto;
+  padding: 22px;
+  color: $heading-color;
+}
+
+.headerHead {
+  font-size: 18px;
+  font-weight: 400;
+  color: $heading-color;
+}
+
+.button {
+  border-radius: 5px;
+  width: 109px;
+  height: 51px;
+  font-size: 18px;
+}
+
+.button:not(:last-child) {
+  margin-right: 20px;
+}
+
+.buttonSuccess {
+  color: $success-color;
+  border: 1px solid $success-color;
+}

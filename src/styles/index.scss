@@ -1,0 +1,16 @@
+@import 'variables.scss';
+
+body {
+  background-color: $--background;
+  margin: 0 auto;
+  font-weight: bold;
+  font-size: 14px;
+  color: $text-color;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: $--font-family;
+}
