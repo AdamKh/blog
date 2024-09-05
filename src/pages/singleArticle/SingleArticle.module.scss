@@ -1,0 +1,156 @@
+@import '../../styles/variables.scss';
+
+.article {
+  min-height: 140px;
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.15);
+  background: $background-color-base;
+  margin-top: 26px;
+  padding: 15px;
+}
+
+.articleSlug {
+  margin-bottom: 26px;
+}
+
+.articleHeader {
+  display: flex;
+  justify-content: space-between;
+}
+
+.articleTitle {
+  font-family: $--font-family;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: $primary-color;
+
+  max-width: 200px;
+  white-space: nowrap; /* Запрещаем перенос строки */
+  overflow: hidden; /* Обрезаем текст, если он выходит за границы */
+  text-overflow: ellipsis; /* Добавляем многоточие для длинных заголовков */
+}
+
+.articleTitleSlug {
+  font-family: $--font-family;
+  font-weight: 400;
+  font-size: 20px;
+  line-height: 140%;
+  color: $primary-color;
+
+  max-width: 300px;
+  white-space: wrap;
+  word-wrap: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.leftTop,
+.leftBottom {
+  display: flex;
+  align-items: center;
+}
+
+.leftBottom {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.leftTop > *:not(:last-child) {
+  margin-right: 13px;
+}
+
+.leftBottom > *:not(:last-child) {
+  margin-right: 8px;
+}
+
+.right {
+  display: flex;
+  align-items: center;
+}
+
+.rightLeft {
+  margin-right: 12px;
+}
+
+.rightLeft > * {
+  text-align: right;
+}
+
+.authorName {
+  width: 200px;
+  font-size: 18px;
+  line-height: 156%;
+  color: $heading-color;
+}
+
+.date {
+  font-size: 12px;
+  line-height: 183%;
+  color: $text-color-secondary;
+}
+
+.description {
+  line-height: 183%;
+  width: 100%;
+  max-height: 45px;
+  overflow: hidden;
+  word-wrap: break-word;
+}
+
+.descriptionSlug {
+  line-height: 183%;
+  width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+
+  color: $text-color-secondary;
+  margin-top: 20px;
+}
+
+.articleBody {
+  margin-top: 25px;
+  width: 100%;
+  overflow: hidden;
+  word-wrap: break-word;
+
+  h1,
+  h2,
+  h3 {
+    font-family: $--font-family;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 140%;
+    color: $text-color;
+    margin-top: 25px;
+    margin-bottom: 5px;
+  }
+  h1 {
+    + h2,
+    + h3 {
+      margin-top: 0;
+    }
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 157%;
+  }
+
+  ul li {
+    list-style-type: none;
+    margin-left: 10px;
+  }
+
+  hr {
+    margin: 10px 0;
+  }
+}

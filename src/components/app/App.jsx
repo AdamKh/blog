@@ -2,7 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 
 import Header from '../header'
 import ArticleList from '../../pages/articlesList'
-import SingleArticle from '../../pages/singleArticle'
+import ArticleBySlug from '../../pages/articleBySlug'
 
 import classes from './App.module.scss'
 
@@ -14,7 +14,7 @@ export default function App() {
         <Routes>
           <Route path="/articles" element={<ArticleList />} />
           <Route path="/" element={<Navigate to="/articles" replace />} />
-          <Route path="/articles/singleArticle" element={<SingleArticle />} />
+          <Route path="/articles/articleBySlug" element={<ArticleBySlug />} />
         </Routes>
       </main>
     </div>

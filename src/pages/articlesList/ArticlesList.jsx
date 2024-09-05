@@ -1,46 +1,12 @@
 /* eslint-disable max-len */
 // import { Link } from 'react-router-dom'
-import { HeartOutlined, HeartTwoTone, UserOutlined } from '@ant-design/icons'
-import { Avatar } from 'antd'
-import { format, parseISO } from 'date-fns'
-import Markdown from 'markdown-to-jsx'
+import { Pagination } from 'antd'
+
+import SingleArticle from '../singleArticle'
 
 // import { shortenText } from '../../utils'
 
 import classes from './ArticlesList.module.scss'
-
-function Article({ article }) {
-  return (
-    <article className={classes.article}>
-      <header className={classes.articleHeader}>
-        <div className={classes.left}>
-          <div className={classes.leftTop}>
-            <p className={classes.articleTitle}>{article.title}</p>
-            {!article.favorited && <HeartOutlined />}
-            {article.favorited && <HeartTwoTone twoToneColor="#FF0707" />}
-          </div>
-          <div className={classes.leftBottom}>
-            {article.tagList.map((tag) => (
-              <span className={classes.tag}>{tag}</span>
-            ))}
-          </div>
-        </div>
-        <div className={classes.right}>
-          <div className={classes.rightLeft}>
-            <p className={classes.authorName}>{article.author.username}</p>
-            <p className={classes.date}>{format(parseISO(article.createdAt), 'MMMM d, yyyy')}</p>
-          </div>
-          <div className={classes.rightRight}>
-            <Avatar size={48} icon={<UserOutlined />} />
-          </div>
-        </div>
-      </header>
-      <p className={classes.description}>
-        <Markdown>{article.description}</Markdown>
-      </p>
-    </article>
-  )
-}
 
 export default function ArticlesList() {
   const articleList = [
@@ -130,8 +96,11 @@ export default function ArticlesList() {
   return (
     <div className={classes.articleList}>
       {articleList.map((article) => (
-        <Article article={article} />
+        <SingleArticle key={article.slug} article={article} />
       ))}
+
+      {/* Pagination total изменить на articlesCount из запроса */}
+      <Pagination className={classes.pagination} align="center" defaultCurrent={1} total={articleList.length} />
     </div>
   )
 }

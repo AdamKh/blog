@@ -1,10 +1,6 @@
 export default class BlogService {
   #apiBase = 'https://blog.kata.academy/api/'
 
-  // #apiImageBase = 'https://image.tmdb.org/t/p/w500'
-
-  #searchId = ''
-
   async getResource(url, method = 'GET', body = null) {
     const options = {
       method,
@@ -27,15 +23,7 @@ export default class BlogService {
     return res.json()
   }
 
-  async createSearchId() {
-    const newSearchId = await this.getResource('/search')
-    this.#searchId = newSearchId.searchId
-  }
-
-  async getTicketsList() {
-    if (!this.#searchId) {
-      await this.createSearchId()
-    }
-    return this.getResource(`/tickets?searchId=${this.#searchId}`)
+  getArticles() {
+    return this.getResource('articles/')
   }
 }
