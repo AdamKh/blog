@@ -23,7 +23,13 @@ export default class BlogService {
     return res.json()
   }
 
-  getArticles() {
-    return this.getResource('articles/')
+  getArticles(page = 1) {
+    const postsPerPage = 20
+    const offset = (page - 1) * postsPerPage
+    return this.getResource(`articles/?limit=${postsPerPage}&offset=${offset}`)
+  }
+
+  getArticleBySlug(slug) {
+    return this.getResource(`articles/${slug}`)
   }
 }

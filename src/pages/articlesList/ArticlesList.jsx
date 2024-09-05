@@ -1,106 +1,42 @@
-/* eslint-disable max-len */
-// import { Link } from 'react-router-dom'
 import { Pagination } from 'antd'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
 
-import SingleArticle from '../singleArticle'
-
-// import { shortenText } from '../../utils'
+import SingleArticle from '../../components/singleArticle'
+import { getArticlesRequest } from '../../store/actions'
 
 import classes from './ArticlesList.module.scss'
 
-export default function ArticlesList() {
-  const articleList = [
-    {
-      slug: 'zagolovok-hlsq43',
-      title: 'Заголовок',
-      description: 'Короткое описание',
-      body: 'Текст\n# Заголовок\n## Заголовок',
-      createdAt: '2024-09-02T15:41:47.289Z',
-      updatedAt: '2024-09-04T14:26:46.802Z',
-      tagList: ['tag 1', 'tag 3', 'tag 5', 'tag 6'],
-      favorited: false,
-      favoritesCount: 2,
-      author: {
-        username: 'mailmann',
-        image:
-          'https://media.king5.com/assets/KING/images/e975f9f0-9d30-4ede-b119-a87f8775d8b0/e975f9f0-9d30-4ede-b119-a87f8775d8b0_1920x1080.jpg',
-        following: false,
-      },
-    },
-    {
-      slug: 'hello-v6ey10',
-      title: 'Hello',
-      description:
-        'Hello ⢀⣀⣰⠟⣷⡀⠀⠀⠀⢀⣘⡞⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣻⣏⣰⢯⠗⠀⠀⠀⢹⣿⣇⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣿⣯⣟⠞⠀⠀⠀⠀⣸⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⠉⠉⢹⡀⠀⠀⢀⡼⠛⠉⠉⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠃⠀⠀⠀⠈⡇⠀⢠⠎⠀⠀⠀⠀⢸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⢸⠁⢀⡏⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡏⠀⠀⠀⠀⠀⣿⠀⣼⠀⠀⠀⠀⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠈⡏⢠⡏⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⣸⠃⣼⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⣿⠀⣿⠀⠀⠀⠀⠀⡼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⣠⣦⡀⡟⠀⡇⢀⣴⣆⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡇⢠⣿⣿⣿⠁⢰⠀⣾⣿⣿⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⣧⠘⣿⣿⢻⠀⠸⠀⢿⣿⡟⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⡆⠈⠁⢸⠀⠀⡇⠀⠉⠀⡜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⡀⠀⢸⠀⠀⣇⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣇⠀⢸⡀⠀⣟⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⠀⠸⡆⠀⣧⣀⣿⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⢷⣲⡦⣄⣹⡤⠞⠉⠙⣇⣸⣧⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢉⡿⢯⣷⡄⠀⠀⠈⠉⡁⠉⠹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠾⣄⣈⠉⠀⠀⢀⣀⡸⠟⠦⠀⠙⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠃⠀⠀⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠸⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠏⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢳⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡶⠶⠶⠶⠤⢄⣖⡝⠲⣄⡏⠿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠾⢹⡁⣠⠶⠚⢦⣀⣀⣠⡤⠴⣶⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠀⣰⠶⠶⢦⣄⡼⠁⢀⡼⠧⠀⣿⠳⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡴⠚⠉⠀⠴⠛⠁⠀⢸⣏⣉⣉⣰⡀⢀⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡾⢹⠀⠀⠘⢧⣄⣠⡞⠁⠀⠀⢸⣄⡴⢿⡇⠀⠀⠀⣴⣖⠶⠶⠶⢶⡶⠚⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⢿⢹⠏⢀⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⣀⣤⠤⠖⠲⣤⢸⡇⢸⣦⣄⡀⠀⣠⠏⠀⠀⠀⠀⠈⠉⠀⢸⡇⠀⣠⠞⠁⠹⣄⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⠳⣶⠒⢫⠏⠀⣼⡁⠀⠀⢀⡤⠖⠢⢤⡀⠀⠀ // ⠀⣠⠞⠉⠀⠀⣠⠔⠛⠉⠙⠘⠃⠀⢙⡶⠃⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠞⠁⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣈⠷⠋⠀⠀⠁⠈⠙⣴⠋⠀⠀⠀⠀⠙⢆⠀ // ⡼⠃⠀⣠⣿⣿⠃⠀⠀⠀⠀⠀⠀⢸⢻⣅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠉⠀⠀⠀⠀⠀⠀⠀⢘⣦⣾⠀⠀⠀⠀⠘⣗ // ⡇⠀⠀⠀⠰⠃⠀⠀⠀⠀⠀⠀⠀⣼⣦⣈⠙⠒⢤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⠇⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠈⠃⠀⠀⠀⠀⢸ // ⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣟⢫⣿⣦⣄⠀⠉⠛⠓⠲⢤⣤⣤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣤⣤⣤⠤⠖⠚⠛⢋⠁⠀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⢸ // ⠸⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠟⠯⣾⣿⣿⣿⣿⣿⣿⣶⣤⡴⠛⠛⠓⠲⠲⠶⠾⠿⣄⠀⠀⠀⢀⣀⣀⣤⣤⣶⣶⣿⡀⠀⠘⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡷ // ⠀⠘⢦⡀⠀⠀⠀⠀⠀⠀⠀⣿⡀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⠃⣼⣿⣿⣿⣿⣿⣿⡒⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠁ // ⠀⠀⠀⠙⢦⣄⡀⠀⠀⠀⠀⣸⡇⠀⠀⠀⠀⠀⠀⠉⠛⠛⢿⡇⢸⣿⣿⣿⣿⣿⣿⠆⢸⣿⣿⣿⣿⣿⣿⠿⠿⠟⠛⠛⠙⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠂⠀⠀ // ⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣬⣥⣄⣠⣁⣤⣭⡤⠞⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣨⡗⠢⠤⢤⣤⣤⡤⠴⠚⠋⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⡇⠀⠀⠹⡽⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⢦⣀⡀⠀⠀⠀⠀⠀⠀⢹⡄⠀⠀⢷⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣀⡁⠀⠀⠀⢦⣀⣀⡀⢳⡀⠀⠀⢿⣧⡀⠀⢀⣀⣀⣀⣠⠤⠄⠀⠀⠉⠀⠈⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠉⠙⠒⢦⣤⣠⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹⣇⣀⣀⣀⣀⣠⢤⠶⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⣠⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⣏⠀⠀⣼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ // ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠤⠴⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣇⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀',
+export default function ArticlesList({ articlesRequest }) {
+  const { articlesCount, articles, loaded } = articlesRequest
+  const [pagValue, setPagValue] = useState(1)
 
-      body: '⢀⣀⣰⠟⣷⡀⠀⠀⠀⢀⣘⡞⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣻⣏⣰⢯⠗⠀⠀⠀⢹⣿⣇⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣿⣯⣟⠞⠀⠀⠀⠀⣸⣿⣿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣰⠏⠉⠉⢹⡀⠀⠀⢀⡼⠛⠉⠉⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠃⠀⠀⠀⠈⡇⠀⢠⠎⠀⠀⠀⠀⢸⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠃⠀⠀⠀⠀⢸⠁⢀⡏⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⡏⠀⠀⠀⠀⠀⣿⠀⣼⠀⠀⠀⠀⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠈⡏⢠⡏⠀⠀⠀⠀⠀⣼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⣸⠃⣼⠀⠀⠀⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⣿⠀⣿⠀⠀⠀⠀⠀⡼⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⡇⠀⣠⣦⡀⡟⠀⡇⢀⣴⣆⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡇⢠⣿⣿⣿⠁⢰⠀⣾⣿⣿⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠰⣧⠘⣿⣿⢻⠀⠸⠀⢿⣿⡟⢰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⡆⠈⠁⢸⠀⠀⡇⠀⠉⠀⡜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢳⡀⠀⢸⠀⠀⣇⠀⠀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣇⠀⢸⡀⠀⣟⠀⠀⡼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣄⠀⠀⠀⠸⡆⠀⣧⣀⣿⠀⢠⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⢷⣲⡦⣄⣹⡤⠞⠉⠙⣇⣸⣧⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢉⡿⢯⣷⡄⠀⠀⠈⠉⡁⠉⠹⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠾⣄⣈⠉⠀⠀⢀⣀⡸⠟⠦⠀⠙⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠃⠀⠀⠉⠉⠉⠉⠉⠁⠀⠀⠀⠀⠀⠸⣷⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⠏⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣠⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢳⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡶⠶⠶⠶⠤⢄⣖⡝⠲⣄⡏⠿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠾⢹⡁⣠⠶⠚⢦⣀⣀⣠⡤⠴⣶⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠀⣰⠶⠶⢦⣄⡼⠁⢀⡼⠧⠀⣿⠳⢦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡴⠚⠉⠀⠴⠛⠁⠀⢸⣏⣉⣉⣰⡀⢀⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡾⢹⠀⠀⠘⢧⣄⣠⡞⠁⠀⠀⢸⣄⡴⢿⡇⠀⠀⠀⣴⣖⠶⠶⠶⢶⡶⠚⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⢿⢹⠏⢀⡞⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⣀⣤⠤⠖⠲⣤⢸⡇⢸⣦⣄⡀⠀⣠⠏⠀⠀⠀⠀⠈⠉⠀⢸⡇⠀⣠⠞⠁⠹⣄⣠⠞⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠚⠳⣶⠒⢫⠏⠀⣼⡁⠀⠀⢀⡤⠖⠢⢤⡀⠀⠀\n// ⠀⣠⠞⠉⠀⠀⣠⠔⠛⠉⠙⠘⠃⠀⢙⡶⠃⠀⠀⠀⠀⠀⠀⠀⠀⠈⢷⠞⠁⠀⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣈⠷⠋⠀⠀⠁⠈⠙⣴⠋⠀⠀⠀⠀⠙⢆⠀\n// ⡼⠃⠀⣠⣿⣿⠃⠀⠀⠀⠀⠀⠀⢸⢻⣅⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⠉⠀⠀⠀⠀⠀⠀⠀⢘⣦⣾⠀⠀⠀⠀⠘⣗\n// ⡇⠀⠀⠀⠰⠃⠀⠀⠀⠀⠀⠀⠀⣼⣦⣈⠙⠒⢤⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣾⠇⠀⠀⠀⠀⠀⠀⠀⠀⢰⡇⠈⠃⠀⠀⠀⠀⢸\n// ⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⣟⢫⣿⣦⣄⠀⠉⠛⠓⠲⢤⣤⣤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣤⣤⣤⠤⠖⠚⠛⢋⠁⠀⣾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠁⠀⠀⠀⠀⠀⠀⢸\n// ⠸⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠟⠯⣾⣿⣿⣿⣿⣿⣿⣶⣤⡴⠛⠛⠓⠲⠲⠶⠾⠿⣄⠀⠀⠀⢀⣀⣀⣤⣤⣶⣶⣿⡀⠀⠘⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡷\n// ⠀⠘⢦⡀⠀⠀⠀⠀⠀⠀⠀⣿⡀⠀⠈⠙⠻⢿⣿⣿⣿⣿⣿⠃⣼⣿⣿⣿⣿⣿⣿⡒⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣧⠀⠀⣿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡜⠁\n// ⠀⠀⠀⠙⢦⣄⡀⠀⠀⠀⠀⣸⡇⠀⠀⠀⠀⠀⠀⠉⠛⠛⢿⡇⢸⣿⣿⣿⣿⣿⣿⠆⢸⣿⣿⣿⣿⣿⣿⠿⠿⠟⠛⠛⠙⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡠⠂⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠉⠉⠉⠉⠉⠀⠹⣆⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣬⣥⣄⣠⣁⣤⣭⡤⠞⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣨⡗⠢⠤⢤⣤⣤⡤⠴⠚⠋⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠳⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⡇⠀⠀⠹⡽⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⠼⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠑⢦⣀⡀⠀⠀⠀⠀⠀⠀⢹⡄⠀⠀⢷⢷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣶⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⣀⡁⠀⠀⠀⢦⣀⣀⡀⢳⡀⠀⠀⢿⣧⡀⠀⢀⣀⣀⣀⣠⠤⠄⠀⠀⠉⠀⠈⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠉⠙⠒⢦⣤⣠⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠹⣇⣀⣀⣀⣀⣠⢤⠶⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠀⠀⣠⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠙⣏⠀⠀⣼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n// ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠤⠴⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⣇⢀⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀\n\nПоказать меньше\nУспешный вход в систему\nНаписать в OxY\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
-      createdAt: '2024-09-03T17:31:32.286Z',
-      updatedAt: '2024-09-04T10:55:50.108Z',
-      tagList: ['1', '2', '3'],
-      favorited: false,
-      favoritesCount: 3,
-      author: {
-        username: 'artem26245',
-        bio: 'I love SPB.',
-        image: 'https://i.pinimg.com/originals/ce/dc/3d/cedc3debaf6cd366755ddcc76e457450.jpg',
-        following: false,
-      },
-    },
-    {
-      slug: 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy-y94ptf',
-      title:
-        'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
-      description:
-        'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
-      body: 'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
-      createdAt: '2024-09-02T13:03:52.340Z',
-      updatedAt: '2024-09-03T11:53:47.349Z',
-      tagList: [
-        'yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy',
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20',
-        '21',
-        '22',
-        '23',
-        '24',
-        '25',
-      ],
-      favorited: false,
-      favoritesCount: 0,
-      author: {
-        username: 'test4444',
-        image: 'https://pbs.twimg.com/profile_images/1607914109378658304/Pn8M2amG_400x400.jpg',
-        following: false,
-      },
-    },
-  ]
+  const dispatch = useDispatch()
 
   return (
-    <div className={classes.articleList}>
-      {articleList.map((article) => (
-        <SingleArticle key={article.slug} article={article} />
-      ))}
+    <>
+      {!loaded && <p>Loading...</p>}
+      {loaded && (
+        <div className={classes.articleList}>
+          {articles.map((article) => (
+            <SingleArticle key={article.slug} article={article} />
+          ))}
 
-      {/* Pagination total изменить на articlesCount из запроса */}
-      <Pagination className={classes.pagination} align="center" defaultCurrent={1} total={articleList.length} />
-    </div>
+          <Pagination
+            className={classes.pagination}
+            align="center"
+            current={pagValue}
+            showSizeChanger={false}
+            total={articlesCount}
+            pageSize={20}
+            onChange={(page) => {
+              setPagValue(page)
+              dispatch(getArticlesRequest(page))
+              window.scrollTo(0, 0)
+            }}
+          />
+        </div>
+      )}
+    </>
   )
 }

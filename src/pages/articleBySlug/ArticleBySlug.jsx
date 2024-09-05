@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import SingleArticle from '../singleArticle'
+import SingleArticle from '../../components/singleArticle'
 
 // import classes from './ArticleBySlug.module.scss'
 

@@ -1,19 +1,27 @@
 import { HeartOutlined, HeartTwoTone, UserOutlined } from '@ant-design/icons'
 import { Avatar } from 'antd'
+import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import Markdown from 'markdown-to-jsx'
 
-import Tag from '../../components/tags'
+import Tag from '../tags'
 
 import classes from './SingleArticle.module.scss'
 
 export default function SingleArticle({ article, articleBySlug }) {
+  // const { slug } = useParams()
+  // if (articleBySlug) {
+  //   dispatch(getArticle(slug))
+  // }
+
   return (
     <article className={`${articleBySlug && classes.articleSlug} ${classes.article}`}>
       <header className={classes.articleHeader}>
         <div className={classes.left}>
           <div className={classes.leftTop}>
-            <p className={articleBySlug ? classes.articleTitleSlug : classes.articleTitle}>{article.title}</p>
+            <Link to={article.slug} className={articleBySlug ? classes.articleTitleSlug : classes.articleTitle}>
+              {article.title}
+            </Link>
             {!article.favorited && <HeartOutlined />}
             {article.favorited && <HeartTwoTone twoToneColor="#FF0707" />}
           </div>
