@@ -21,8 +21,16 @@ export default function SingleArticle({ article, articleBySlug }) {
                 {article.title}
               </Link>
             )}
-            {!article.favorited && <HeartOutlined />}
-            {article.favorited && <HeartTwoTone twoToneColor="#FF0707" />}
+            {!article.favorited && (
+              <span>
+                <HeartOutlined /> {article.favoritesCount}
+              </span>
+            )}
+            {article.favorited && (
+              <span>
+                <HeartTwoTone twoToneColor="#FF0707" /> {article.favoritesCount}
+              </span>
+            )}
           </div>
           <div className={classes.leftBottom}>
             {article.tagList.map((tag) => (
