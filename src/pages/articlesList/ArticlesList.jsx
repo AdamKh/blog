@@ -1,17 +1,20 @@
 import { Pagination } from 'antd'
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import SingleArticle from '../../components/singleArticle'
-import { getArticlesRequest } from '../../store/actions'
+import { getArticlesRequest, setPaginationPage } from '../../store/actions'
 
 import classes from './ArticlesList.module.scss'
 
 export default function ArticlesList({ articlesRequest }) {
   const { articlesCount, articles, loaded } = articlesRequest
-  const [pagValue, setPagValue] = useState(1)
-
   const dispatch = useDispatch()
+  const pagValue = useSelector((state) => state.pagValue)
+
+  useEffect(() => {
+    dispatch(getArticlesRequest(pagValue))
+  }, [dispatch, pagValue])
 
   return (
     <>
@@ -30,8 +33,7 @@ export default function ArticlesList({ articlesRequest }) {
             total={articlesCount}
             pageSize={20}
             onChange={(page) => {
-              setPagValue(page)
-              dispatch(getArticlesRequest(page))
+              dispatch(setPaginationPage(page))
               window.scrollTo(0, 0)
             }}
           />

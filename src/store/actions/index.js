@@ -17,3 +17,8 @@ export const getArticlesRequest = (page) => (dispatch) => {
     .then((res) => dispatch({ type: 'NEW_ARTICLES_REQUEST_SUCCESS', payload: res }))
     .catch((err) => dispatch({ type: 'NEW_ARTICLES_REQUEST_FAILURE', err }))
 }
+
+export const setPaginationPage = (page) => ({
+  type: 'SET_PAGINATION_PAGE',
+  payload: page,
+})
