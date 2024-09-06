@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import SingleArticle from '../../components/singleArticle'
+import Spinner from '../../components/spinner'
 import { getArticlesRequest, setPaginationPage } from '../../store/actions'
 
 import classes from './ArticlesList.module.scss'
@@ -18,7 +19,7 @@ export default function ArticlesList({ articlesRequest }) {
 
   return (
     <>
-      {!loaded && <p>Loading...</p>}
+      {!loaded && <Spinner />}
       {loaded && (
         <div className={classes.articleList}>
           {articles.map((article) => (

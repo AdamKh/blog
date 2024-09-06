@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import SingleArticle from '../../components/singleArticle'
+import Spinner from '../../components/spinner'
 import { getArticle } from '../../store/actions'
 
 export default function ArticleBySlug() {
@@ -18,7 +19,7 @@ export default function ArticleBySlug() {
 
   return (
     <>
-      {!articleBySlug.loaded && <p>Loading...</p>}
+      {!articleBySlug.loaded && <Spinner />}
       {articleBySlug.loaded && <SingleArticle article={articleBySlug.article} articleBySlug />}
     </>
   )
