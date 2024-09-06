@@ -9,19 +9,18 @@ import Tag from '../tags'
 import classes from './SingleArticle.module.scss'
 
 export default function SingleArticle({ article, articleBySlug }) {
-  // const { slug } = useParams()
-  // if (articleBySlug) {
-  //   dispatch(getArticle(slug))
-  // }
-
   return (
     <article className={`${articleBySlug && classes.articleSlug} ${classes.article}`}>
       <header className={classes.articleHeader}>
         <div className={classes.left}>
           <div className={classes.leftTop}>
-            <Link to={article.slug} className={articleBySlug ? classes.articleTitleSlug : classes.articleTitle}>
-              {article.title}
-            </Link>
+            {articleBySlug ? (
+              <h1 className={classes.articleTitleSlug}>{article.title}</h1>
+            ) : (
+              <Link to={article.slug} className={classes.articleTitle}>
+                {article.title}
+              </Link>
+            )}
             {!article.favorited && <HeartOutlined />}
             {article.favorited && <HeartTwoTone twoToneColor="#FF0707" />}
           </div>
@@ -44,7 +43,7 @@ export default function SingleArticle({ article, articleBySlug }) {
       <p className={articleBySlug ? classes.descriptionSlug : classes.description}>
         <Markdown>{article.description}</Markdown>
       </p>
-      {articleBySlug && <Markdown className={classes.articleBody}>{article.body}</Markdown>}
+      <div className={classes.articleBody}>{articleBySlug && <Markdown>{article.body}</Markdown>}</div>
     </article>
   )
 }
