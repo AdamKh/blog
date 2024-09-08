@@ -5,6 +5,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import Layout from '../layout'
 import ArticleList from '../../pages/articlesList'
 import ArticleBySlug from '../../pages/articleBySlug'
+import LoginPage from '../../pages/loginPage'
+import RegisterPage from '../../pages/registerPage'
+import EditProfile from '../../pages/editProfile'
+// import RequireAuth from '../../hoc/RequireAuth'
 import { getArticlesRequest } from '../../store/actions/index'
 
 export default function App() {
@@ -22,6 +26,23 @@ export default function App() {
         <Route index element={<Navigate to="/articles" replace />} />
         <Route path="articles" element={<ArticleList articlesRequest={articlesRequest} />} />
         <Route path="articles/:slug" element={<ArticleBySlug />} />
+        {/* <Route
+          path="articles/new-article"
+          element={
+            <CreateArticle />
+          }
+        /> */}
+        {/* <Route
+          path="articles/{slug}/edit"
+          element={
+            <RequireAuth>
+              <EditArticle />
+            </RequireAuth>
+          }
+        /> */}
+        <Route path="sign-in" element={<LoginPage />} />
+        <Route path="sign-up" element={<RegisterPage />} />
+        <Route path="profile" element={<EditProfile />} />
       </Route>
     </Routes>
   )

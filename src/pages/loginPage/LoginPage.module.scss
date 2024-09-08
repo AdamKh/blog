@@ -1,0 +1,109 @@
+@import '../../styles/variables.scss';
+
+.loginWrapper {
+  margin: 0 auto;
+  margin-top: 60px;
+  border: 1px solid $normal-color;
+  border-radius: 6px;
+  padding: 48px 32px;
+  width: 384px;
+  box-shadow:
+    0 1px 3px 0 $--table-header,
+    0 1px 7px 0 rgba(0, 0, 0, 0.03),
+    0 3px 13px 0 rgba(0, 0, 0, 0.04),
+    0 5px 24px 0 rgba(0, 0, 0, 0.04),
+    0 9px 44px 0 rgba(0, 0, 0, 0.05),
+    0 22px 106px 0 rgba(0, 0, 0, 0.07);
+  background: $background-color-base;
+}
+
+.header {
+  font-family: $--second-family;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 140%;
+  text-align: center;
+  color: #262626;
+}
+
+.inputGroup {
+  margin-top: 12px;
+}
+
+.inputGroup:first-child {
+  margin-top: 21px;
+}
+
+.inputGroup label {
+  font-family: $--second-family;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 157%;
+  color: #262626;
+}
+
+.form input {
+  padding: 8px 12px;
+  border: 1px solid $normal-color;
+  border-radius: 4px;
+  width: 320px;
+  height: 40px;
+  font-family: var(--second-family);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+.form .errorInput {
+  border: 1px solid $error-color;
+}
+
+.error {
+  margin-top: 5px;
+  font-family: $--second-family;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 157%;
+  color: $error-color;
+}
+
+.submit {
+  margin-top: 21px;
+  border-radius: 4px;
+  padding: 8px 16px;
+  width: 319px;
+  height: 40px;
+  background: $primary-color;
+  font-family: $--second-family;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 150%;
+  text-align: center;
+  color: $background-color-base;
+}
+
+.submit:hover {
+  background: #4e9de7;
+}
+
+.submit:active {
+  background: #5da2e3;
+}
+
+.footer {
+  margin-top: 10px;
+}
+
+.footer p {
+  font-family: $--second-family;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 167%;
+  text-align: center;
+  color: #8c8c8c;
+}
+
+.Link {
+  color: $primary-color;
+  text-decoration: none;
+}

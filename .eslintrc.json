@@ -28,6 +28,7 @@
   },
   "plugins": ["react", "prettier", "import", "react-hooks", "jsx-a11y"],
   "rules": {
+    "react/jsx-props-no-spreading": "off",
     "default-param-last": "off",
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "object-curly-newline": ["off"],
