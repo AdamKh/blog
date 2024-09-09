@@ -1,12 +1,22 @@
-// import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import classNames from 'classnames'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { createNewUserAction } from '../../store/actions'
 
 import classes from './RegisterPage.module.scss'
 
 export default function RegisterPage() {
+  const navigate = useNavigate()
+  const location = useLocation()
+
+  const fromPage = location.state?.from?.pathname || '/'
+
+  const { err: errors } = useSelector((state) => state.user)
+  const dispatch = useDispatch()
+
   const [errorClasses, setErrorClasses] = useState({
     username: '',
     email: '',
@@ -18,15 +28,17 @@ export default function RegisterPage() {
     register,
     handleSubmit,
     watch,
-    formState: { errors },
+    formState: { errors: errorsForm },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data) // Здесь можно обработать данные, например, отправить на сервер
+  const onSubmit = async (data) => {
+    await dispatch(
+      createNewUserAction({ user: { username: data.username, email: data.email, password: data.password } })
+    )
+    if (!errors || Object.keys(errors).length === 0) navigate(fromPage)
   }
 
   const onError = (error) => {
-    console.log('error', error)
     setErrorClasses({
       username: classNames({ [classes.errorInput]: error.username }),
       email: classNames({ [classes.errorInput]: error.email }),
@@ -34,11 +46,6 @@ export default function RegisterPage() {
       repeatPassword: classNames({ [classes.errorInput]: error.repeatPassword }),
     })
   }
-
-  // const navigate = useNavigate()
-  // const location = useLocation()
-
-  // const fromPage = location.state?.from?.pathname || '/'
 
   return (
     <div className={classes.registerWrapper}>
@@ -65,7 +72,8 @@ export default function RegisterPage() {
                 },
               })}
             />
-            {errors.username && <p className={classes.error}>{errors.username.message}</p>}
+            {errorsForm.username && <p className={classes.error}>{errorsForm.username.message}</p>}
+            {errors?.username && <p className={classes.error}>{errors.username}</p>}
           </label>
         </div>
 
@@ -82,7 +90,8 @@ export default function RegisterPage() {
                 pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' },
               })}
             />
-            {errors.email && <p className={classes.error}>{errors.email.message}</p>}
+            {errorsForm.email && <p className={classes.error}>{errorsForm.email.message}</p>}
+            {errors?.email && <p className={classes.error}>{errors.email}</p>}
           </label>
         </div>
 
@@ -106,7 +115,7 @@ export default function RegisterPage() {
                 },
               })}
             />
-            {errors.password && <p className={classes.error}>{errors.password.message}</p>}
+            {errorsForm.password && <p className={classes.error}>{errorsForm.password.message}</p>}
           </label>
         </div>
 
@@ -123,7 +132,7 @@ export default function RegisterPage() {
                 validate: (value) => value === watch('password') || 'Passwords do not match',
               })}
             />
-            {errors.repeatPassword && <p className={classes.error}>{errors.repeatPassword.message}</p>}
+            {errorsForm.repeatPassword && <p className={classes.error}>{errorsForm.repeatPassword.message}</p>}
           </label>
         </div>
 
@@ -132,7 +141,7 @@ export default function RegisterPage() {
             <input id="agree" type="checkbox" defaultChecked {...register('terms', { required: true })} />{' '}
             <p>I agree to the processing of my personal information</p>
           </label>
-          {errors.terms && <p className={classes.error}>You must agree to continue</p>}
+          {errorsForm.terms && <p className={classes.error}>You must agree to continue</p>}
         </div>
 
         <button className={classes.submit} type="submit">

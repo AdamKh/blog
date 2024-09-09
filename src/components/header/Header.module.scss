@@ -21,19 +21,3 @@
   font-weight: 400;
   color: $heading-color;
 }
-
-.button {
-  border-radius: 5px;
-  width: 109px;
-  height: 51px;
-  font-size: 18px;
-}
-
-.link:not(:last-child) {
-  margin-right: 20px;
-}
-
-.buttonSuccess {
-  color: $success-color;
-  border: 1px solid $success-color;
-}

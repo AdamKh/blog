@@ -3,6 +3,7 @@ import { Avatar } from 'antd'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import Markdown from 'markdown-to-jsx'
+import { v4 as uuidv4 } from 'uuid'
 
 import Tag from '../tags'
 
@@ -34,7 +35,7 @@ export default function SingleArticle({ article, articleBySlug }) {
           </div>
           <div className={classes.leftBottom}>
             {article.tagList.map((tag) => (
-              <Tag key={`${article.slug + tag}`} tag={tag} />
+              <Tag key={uuidv4()} tag={tag} />
             ))}
           </div>
         </div>

@@ -1,11 +1,21 @@
-// import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import classNames from 'classnames'
+
+import { editProfileAction } from '../../store/actions'
 
 import classes from './EditProfile.module.scss'
 
 export default function EditProfile() {
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const { user, err: errors } = useSelector((state) => state.user)
+
+  const fromPage = location.state?.from?.pathname || '/'
+
   const [errorClasses, setErrorClasses] = useState({
     username: '',
     email: '',
@@ -16,15 +26,19 @@ export default function EditProfile() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors: errorsForm },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data) // Здесь можно обработать данные, например, отправить на сервер
+  const onSubmit = async (data) => {
+    await dispatch(
+      editProfileAction({
+        user: { username: data.username, email: data.email, password: data.password, image: data.imageUrl },
+      })
+    )
+    if (!errors || Object.keys(errors).length === 0) navigate(fromPage)
   }
 
   const onError = (error) => {
-    console.log('error', error)
     setErrorClasses({
       username: classNames({ [classes.errorInput]: error.username }),
       email: classNames({ [classes.errorInput]: error.email }),
@@ -32,11 +46,6 @@ export default function EditProfile() {
       imageUrl: classNames({ [classes.errorInput]: error.imageUrl }),
     })
   }
-
-  // const navigate = useNavigate()
-  // const location = useLocation()
-
-  // const fromPage = location.state?.from?.pathname || '/'
 
   return (
     <div className={classes.editWrapper}>
@@ -51,8 +60,8 @@ export default function EditProfile() {
               id="username"
               type="text"
               placeholder="New username"
+              defaultValue={user.username}
               {...register('username', {
-                required: 'Username is required',
                 minLength: {
                   value: 3,
                   message: 'Username must be at least 3 characters long',
@@ -63,7 +72,8 @@ export default function EditProfile() {
                 },
               })}
             />
-            {errors.username && <p className={classes.error}>{errors.username.message}</p>}
+            {errorsForm.username && <p className={classes.error}>{errorsForm.username.message}</p>}
+            {errors?.username && <p className={classes.error}>{errors.username}</p>}
           </label>
         </div>
 
@@ -75,12 +85,13 @@ export default function EditProfile() {
               id="email"
               type="email"
               placeholder="New email address"
+              defaultValue={user.email}
               {...register('email', {
-                required: 'Email is required',
                 pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' },
               })}
             />
-            {errors.email && <p className={classes.error}>{errors.email.message}</p>}
+            {errorsForm.email && <p className={classes.error}>{errorsForm.email.message}</p>}
+            {errors?.email && <p className={classes.error}>{errors.email}</p>}
           </label>
         </div>
 
@@ -92,8 +103,8 @@ export default function EditProfile() {
               id="password"
               type="password"
               placeholder="New password"
+              defaultValue={user.password}
               {...register('password', {
-                required: 'Password is required',
                 minLength: {
                   value: 6,
                   message: 'Password must be at least 6 characters long',
@@ -104,7 +115,8 @@ export default function EditProfile() {
                 },
               })}
             />
-            {errors.password && <p className={classes.error}>{errors.password.message}</p>}
+            {errorsForm.password && <p className={classes.error}>{errorsForm.password.message}</p>}
+            {errors?.imageUrl && <p className={classes.error}>{errors.imageUrl}</p>}
           </label>
         </div>
 
@@ -116,6 +128,7 @@ export default function EditProfile() {
               id="imageUrl"
               type="text"
               placeholder="Avatar image"
+              defaultValue={user.imageUrl || null}
               {...register('imageUrl', {
                 pattern: {
                   value: /^(https?:\/\/[^\s$.?#].[^\s]*)$/,
@@ -123,7 +136,8 @@ export default function EditProfile() {
                 },
               })}
             />
-            {errors.imageUrl && <p className={classes.error}>{errors.imageUrl.message}</p>}
+            {errorsForm.imageUrl && <p className={classes.error}>{errorsForm.imageUrl.message}</p>}
+            {errors?.imageUrl && <p className={classes.error}>{errors.imageUrl}</p>}
           </label>
         </div>
 

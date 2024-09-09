@@ -1,10 +1,13 @@
 export default class BlogService {
-  #apiBase = 'https://blog.kata.academy/api/'
+  #apiBase = 'https://api.realworld.io/api/'
+
+  #token = ''
 
   async getResource(url, method = 'GET', body = null) {
     const options = {
       method,
       headers: {
+        Authorization: `Bearer ${this.#token}`,
         accept: 'application/json',
         'Content-Type': 'application/json',
       },
@@ -17,7 +20,8 @@ export default class BlogService {
     const res = await fetch(`${this.#apiBase}${url}`, options)
 
     if (!res.ok) {
-      throw new Error(`Ошибка ${res.status}`)
+      const error = await res.json()
+      throw error
     }
 
     return res.json()
@@ -31,5 +35,20 @@ export default class BlogService {
 
   getArticleBySlug(slug) {
     return this.getResource(`articles/${slug}`)
+  }
+
+  async login(user) {
+    const response = await this.getResource('/users/login', 'POST', user)
+    this.#token = response.user.token
+
+    return response
+  }
+
+  registerNewUser(user) {
+    return this.getResource('/users', 'POST', user)
+  }
+
+  editProfile(user) {
+    return this.getResource('/user', 'PUT', user)
   }
 }

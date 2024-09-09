@@ -22,3 +22,30 @@ export const setPaginationPage = (page) => ({
   type: 'SET_PAGINATION_PAGE',
   payload: page,
 })
+
+export const loginAction = (body) => (dispatch) => {
+  blogService
+    .login(body)
+    .then((res) => {
+      dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user })
+    })
+    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
+}
+
+export const createNewUserAction = (body) => (dispatch) => {
+  blogService
+    .registerNewUser(body)
+    .then((res) => dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user }))
+    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
+}
+
+export const editProfileAction = (body) => (dispatch) => {
+  blogService
+    .editProfile(body)
+    .then((res) => dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user }))
+    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
+}
+
+export const logoutAction = () => ({
+  type: 'LOGOUT',
+})

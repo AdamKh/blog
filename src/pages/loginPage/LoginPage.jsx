@@ -1,34 +1,43 @@
-// import { useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import classNames from 'classnames'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { loginAction } from '../../store/actions'
 
 import classes from './LoginPage.module.scss'
 
 export default function LoginPage() {
-  const [emailClasses, setEmailClasses] = useState('')
-  const [passwordClasses, setPasswordClasses] = useState('')
+  const navigate = useNavigate()
+  const location = useLocation()
+  const dispatch = useDispatch()
+  const { err } = useSelector((state) => state.user)
+
+  const fromPage = location.state?.from?.pathname || '/'
+
+  const [errorClasses, setErrorClasses] = useState({
+    email: '',
+    password: '',
+  })
+
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors: errorsForm },
   } = useForm()
 
-  const onSubmit = (data) => {
-    console.log(data) // Здесь можно обработать данные, например, отправить на сервер
+  const onSubmit = async (data) => {
+    await dispatch(loginAction({ user: { email: data.email, password: data.password } }))
+    if (!err || Object.keys(err).length === 0) navigate(fromPage)
   }
 
   const onError = (error) => {
-    console.log(error)
-    setEmailClasses(classNames({ [classes.errorInput]: error.email }))
-    setPasswordClasses(classNames({ [classes.errorInput]: error.password }))
+    setErrorClasses({
+      email: classNames({ [classes.errorInput]: error.email }),
+      password: classNames({ [classes.errorInput]: error.password }),
+    })
   }
-
-  // const navigate = useNavigate()
-  // const location = useLocation()
-
-  // const fromPage = location.state?.from?.pathname || '/'
 
   return (
     <div className={classes.loginWrapper}>
@@ -38,7 +47,7 @@ export default function LoginPage() {
           <label htmlFor="email">
             <p>Email address</p>
             <input
-              className={emailClasses}
+              className={errorClasses.email}
               id="email"
               type="email"
               placeholder="Email address"
@@ -47,7 +56,8 @@ export default function LoginPage() {
                 pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: 'Enter a valid email address' },
               })}
             />
-            {errors.email && <p className={classes.error}>{errors.email.message}</p>}
+            {errorsForm.email && <p className={classes.error}>{errorsForm.email.message}</p>}
+            {err?.email && <p className={classes.error}>{err.email}</p>}
           </label>
         </div>
 
@@ -55,7 +65,7 @@ export default function LoginPage() {
           <label htmlFor="password">
             <p>Password</p>
             <input
-              className={passwordClasses}
+              className={errorClasses.password}
               id="password"
               type="password"
               placeholder="Password"
@@ -71,7 +81,8 @@ export default function LoginPage() {
                 },
               })}
             />
-            {errors.password && <p className={classes.error}>{errors.password.message}</p>}
+            {errorsForm.password && <p className={classes.error}>{errorsForm.password.message}</p>}
+            {err?.password && <p className={classes.error}>{err.password}</p>}
           </label>
         </div>
 
@@ -79,6 +90,7 @@ export default function LoginPage() {
           Login
         </button>
 
+        {err?.['email or password'] && <p className={classes.error}>Email or password {err?.['email or password']}</p>}
         <footer className={classes.footer}>
           <p>
             Don’t have an account?{' '}
