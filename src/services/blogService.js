@@ -1,5 +1,5 @@
 export default class BlogService {
-  #apiBase = 'https://api.realworld.io/api/'
+  #apiBase = 'https://blog.kata.academy/api/'
 
   #token = ''
 

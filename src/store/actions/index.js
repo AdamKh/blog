@@ -23,28 +23,41 @@ export const setPaginationPage = (page) => ({
   payload: page,
 })
 
-export const loginAction = (body) => (dispatch) => {
+export const loginAction = (body) => (dispatch) =>
   blogService
     .login(body)
     .then((res) => {
       dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user })
+      return res.user
     })
-    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
-}
+    .catch((err) => {
+      dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors })
+      return { err: err.errors }
+    })
 
-export const createNewUserAction = (body) => (dispatch) => {
+export const createNewUserAction = (body) => (dispatch) =>
   blogService
     .registerNewUser(body)
-    .then((res) => dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user }))
-    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
-}
+    .then((res) => {
+      dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user })
+      return res.user
+    })
+    .catch((err) => {
+      dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors })
+      return { err: err.errors }
+    })
 
-export const editProfileAction = (body) => (dispatch) => {
+export const editProfileAction = (body) => (dispatch) =>
   blogService
     .editProfile(body)
-    .then((res) => dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user }))
-    .catch((err) => dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors }))
-}
+    .then((res) => {
+      dispatch({ type: 'USER_LOGIN_SUCCESS', payload: res.user })
+      return res.user
+    })
+    .catch((err) => {
+      dispatch({ type: 'USER_LOGIN_FAILURE', err: err.errors })
+      return { err: err.errors }
+    })
 
 export const logoutAction = () => ({
   type: 'LOGOUT',

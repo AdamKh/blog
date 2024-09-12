@@ -32,10 +32,13 @@ export default function RegisterPage() {
   } = useForm()
 
   const onSubmit = async (data) => {
-    await dispatch(
+    const result = await dispatch(
       createNewUserAction({ user: { username: data.username, email: data.email, password: data.password } })
     )
-    if (!errors || Object.keys(errors).length === 0) navigate(fromPage)
+
+    if (!result.err) {
+      navigate(fromPage)
+    }
   }
 
   const onError = (error) => {

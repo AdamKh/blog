@@ -12,7 +12,7 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-  const { err } = useSelector((state) => state.user)
+  const { err: errors } = useSelector((state) => state.user)
 
   const fromPage = location.state?.from?.pathname || '/'
 
@@ -28,8 +28,11 @@ export default function LoginPage() {
   } = useForm()
 
   const onSubmit = async (data) => {
-    await dispatch(loginAction({ user: { email: data.email, password: data.password } }))
-    if (!err || Object.keys(err).length === 0) navigate(fromPage)
+    const result = await dispatch(loginAction({ user: { email: data.email, password: data.password } }))
+
+    if (!result.err) {
+      navigate(fromPage)
+    }
   }
 
   const onError = (error) => {
@@ -57,7 +60,7 @@ export default function LoginPage() {
               })}
             />
             {errorsForm.email && <p className={classes.error}>{errorsForm.email.message}</p>}
-            {err?.email && <p className={classes.error}>{err.email}</p>}
+            {errors?.email && <p className={classes.error}>{errors.email}</p>}
           </label>
         </div>
 
@@ -82,7 +85,7 @@ export default function LoginPage() {
               })}
             />
             {errorsForm.password && <p className={classes.error}>{errorsForm.password.message}</p>}
-            {err?.password && <p className={classes.error}>{err.password}</p>}
+            {errors?.password && <p className={classes.error}>{errors.password}</p>}
           </label>
         </div>
 
@@ -90,7 +93,9 @@ export default function LoginPage() {
           Login
         </button>
 
-        {err?.['email or password'] && <p className={classes.error}>Email or password {err?.['email or password']}</p>}
+        {errors?.['email or password'] && (
+          <p className={classes.error}>Email or password {errors?.['email or password']}</p>
+        )}
         <footer className={classes.footer}>
           <p>
             Don’t have an account?{' '}

@@ -30,12 +30,23 @@ export default function EditProfile() {
   } = useForm()
 
   const onSubmit = async (data) => {
-    await dispatch(
-      editProfileAction({
-        user: { username: data.username, email: data.email, password: data.password, image: data.imageUrl },
-      })
-    )
-    if (!errors || Object.keys(errors).length === 0) navigate(fromPage)
+    const userData = {
+      user: {
+        username: data.username,
+        email: data.email,
+        image: data.imageUrl,
+      },
+    }
+
+    if (data.password) {
+      userData.user.password = data.password
+    }
+
+    const result = await dispatch(editProfileAction(userData))
+
+    if (!result.err) {
+      navigate(fromPage)
+    }
   }
 
   const onError = (error) => {
