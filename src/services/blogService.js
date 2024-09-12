@@ -1,7 +1,7 @@
 export default class BlogService {
   #apiBase = 'https://blog.kata.academy/api/'
 
-  #token = ''
+  #token = localStorage.getItem('token') || ''
 
   async getResource(url, method = 'GET', body = null) {
     const options = {
@@ -40,6 +40,7 @@ export default class BlogService {
   async login(user) {
     const response = await this.getResource('/users/login', 'POST', user)
     this.#token = response.user.token
+    localStorage.setItem('token', response.user.token)
 
     return response
   }
@@ -50,5 +51,10 @@ export default class BlogService {
 
   editProfile(user) {
     return this.getResource('/user', 'PUT', user)
+  }
+
+  getCurrentUser() {
+    if (this.#token) return this.getResource('/user')
+    return null
   }
 }

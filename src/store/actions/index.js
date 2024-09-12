@@ -62,3 +62,8 @@ export const editProfileAction = (body) => (dispatch) =>
 export const logoutAction = () => ({
   type: 'LOGOUT',
 })
+
+export const getCurrentUserAction = () => (dispatch) =>
+  blogService.getCurrentUser().then((res) => {
+    if (res) dispatch({ type: 'GET_CURRENT_USER', payload: res.user })
+  })

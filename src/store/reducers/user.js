@@ -22,6 +22,8 @@ const user = (state = initialState, action) => {
         user: {},
         loggedIn: false,
       }
+    case 'GET_CURRENT_USER':
+      return { ...state, user: { ...action.payload }, loggedIn: true, err: null }
     default:
       return state
   }

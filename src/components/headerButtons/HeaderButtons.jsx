@@ -42,7 +42,9 @@ export default function HeaderButtons() {
             size="large"
             onClick={() => dispatch(logoutAction())}
           >
-            log Out
+            <Link to="/" className={classes.link}>
+              log Out
+            </Link>
           </Button>
         </div>
       )}

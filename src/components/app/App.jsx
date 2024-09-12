@@ -9,7 +9,7 @@ import LoginPage from '../../pages/loginPage'
 import RegisterPage from '../../pages/registerPage'
 import EditProfile from '../../pages/editProfile'
 // import RequireAuth from '../../hoc/RequireAuth'
-import { getArticlesRequest } from '../../store/actions/index'
+import { getArticlesRequest, getCurrentUserAction } from '../../store/actions/index'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -18,6 +18,7 @@ export default function App() {
 
   useEffect(() => {
     dispatch(getArticlesRequest())
+    dispatch(getCurrentUserAction())
   }, [dispatch])
 
   return (
