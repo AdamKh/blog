@@ -8,6 +8,7 @@ import ArticleBySlug from '../../pages/articleBySlug'
 import LoginPage from '../../pages/loginPage'
 import RegisterPage from '../../pages/registerPage'
 import EditProfile from '../../pages/editProfile'
+import CreateArticle from '../../pages/createArticle'
 // import RequireAuth from '../../hoc/RequireAuth'
 import { getArticlesRequest, getCurrentUserAction } from '../../store/actions/index'
 
@@ -27,12 +28,7 @@ export default function App() {
         <Route index element={<Navigate to="/articles" replace />} />
         <Route path="articles" element={<ArticleList articlesRequest={articlesRequest} />} />
         <Route path="articles/:slug" element={<ArticleBySlug />} />
-        {/* <Route
-          path="articles/new-article"
-          element={
-            <CreateArticle />
-          }
-        /> */}
+        <Route path="new-article" element={<CreateArticle />} />
         {/* <Route
           path="articles/{slug}/edit"
           element={

@@ -28,7 +28,7 @@ export default function HeaderButtons() {
 
       {loggedIn && (
         <div className={classes.buttonsWrapper}>
-          <Link to="/" className={classes.link}>
+          <Link to="/new-article" className={classes.link}>
             <Button className={`${classes.button} ${classes.buttonSuccess} ${classes.buttonCreateArticle}`}>
               Create article
             </Button>
