@@ -10,6 +10,35 @@
 
 .articleSlug {
   margin-bottom: 26px;
+
+  .descriptionWrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+  }
+}
+
+.buttonDelete {
+  border: 1px solid $error-color;
+  color: $error-color;
+  border-radius: 5px;
+  width: 78px;
+  height: 31px;
+}
+
+.buttonEdit {
+  border: 1px solid $success-color;
+  color: $success-color;
+  border-radius: 5px;
+  width: 65px;
+  height: 31px;
 }
 
 .articleHeader {
@@ -102,12 +131,11 @@
 
 .descriptionSlug {
   line-height: 183%;
-  width: 100%;
+  max-width: 682px;
   overflow: hidden;
   word-wrap: break-word;
 
   color: $text-color-secondary;
-  margin-top: 20px;
 }
 
 .articleBody {

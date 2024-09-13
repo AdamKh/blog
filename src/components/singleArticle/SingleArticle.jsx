@@ -1,15 +1,18 @@
 import { HeartOutlined, HeartTwoTone, UserOutlined } from '@ant-design/icons'
-import { Avatar } from 'antd'
+import { Avatar, Button } from 'antd'
 import { Link } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import Markdown from 'markdown-to-jsx'
 import { v4 as uuidv4 } from 'uuid'
+import { useSelector } from 'react-redux'
 
 import Tag from '../tags'
 
 import classes from './SingleArticle.module.scss'
 
 export default function SingleArticle({ article, articleBySlug }) {
+  const { loggedIn } = useSelector((state) => state.user)
+
   return (
     <article className={`${articleBySlug && classes.articleSlug} ${classes.article}`}>
       <header className={classes.articleHeader}>
@@ -49,9 +52,20 @@ export default function SingleArticle({ article, articleBySlug }) {
           </div>
         </div>
       </header>
-      <p className={articleBySlug ? classes.descriptionSlug : classes.description}>
-        <Markdown>{article.description}</Markdown>
-      </p>
+
+      <div className={classes.descriptionWrapper}>
+        <p className={articleBySlug ? classes.descriptionSlug : classes.description}>
+          <Markdown>{article.description}</Markdown>
+        </p>
+
+        {articleBySlug && loggedIn && (
+          <div className={classes.buttons}>
+            <Button className={classes.buttonDelete}>Delete</Button>
+            <Button className={classes.buttonEdit}>Edit</Button>
+          </div>
+        )}
+      </div>
+
       <div className={classes.articleBody}>{articleBySlug && <Markdown>{article.body}</Markdown>}</div>
     </article>
   )

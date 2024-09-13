@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 
 import BlogService from '../../services/blogService'
 
-import classes from './CreateArticle.module.scss'
+import classes from './EditArticle.module.scss'
 
 const blogService = new BlogService()
 

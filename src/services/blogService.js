@@ -56,4 +56,9 @@ export default class BlogService {
   getCurrentUser() {
     return this.getResource('/user')
   }
+
+  async postArticle(body) {
+    const res = await this.getResource('/articles', 'POST', body)
+    return res
+  }
 }

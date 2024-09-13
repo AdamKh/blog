@@ -8,14 +8,14 @@ import ArticleBySlug from '../../pages/articleBySlug'
 import LoginPage from '../../pages/loginPage'
 import RegisterPage from '../../pages/registerPage'
 import EditProfile from '../../pages/editProfile'
-import CreateArticle from '../../pages/createArticle'
 import RequireAuth from '../../hoc/RequireAuth'
+import CreateArticle from '../../pages/createArticle'
+import EditArticle from '../../pages/editArticle'
 import { getArticlesRequest, getCurrentUserAction } from '../../store/actions/index'
 
 export default function App() {
   const dispatch = useDispatch()
   const articlesRequest = useSelector((state) => state.articleRequest)
-  // const { articlesCount, articles } = articlesRequest
 
   useEffect(() => {
     dispatch(getArticlesRequest())
@@ -36,14 +36,14 @@ export default function App() {
             </RequireAuth>
           }
         />
-        {/* <Route
+        <Route
           path="articles/{slug}/edit"
           element={
             <RequireAuth>
               <EditArticle />
             </RequireAuth>
           }
-        /> */}
+        />
         <Route path="sign-in" element={<LoginPage />} />
         <Route path="sign-up" element={<RegisterPage />} />
         <Route path="profile" element={<EditProfile />} />

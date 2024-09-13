@@ -1,11 +1,4 @@
 const initialState = {
-  user: {
-    email: '',
-    token: '',
-    username: '',
-    bio: '',
-    image: null,
-  },
   loggedIn: false,
   err: null,
 }

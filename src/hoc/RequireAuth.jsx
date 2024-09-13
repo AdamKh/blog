@@ -3,9 +3,9 @@ import { useSelector } from 'react-redux'
 
 export default function RequireAuth({ children }) {
   const location = useLocation()
-  const { loggedIn } = useSelector((state) => state.user)
+  const { loggedIn, user } = useSelector((state) => state.user)
 
-  if (!loggedIn) {
+  if (!loggedIn && user) {
     return <Navigate to="/sign-in" state={{ from: location }} />
   }
 
