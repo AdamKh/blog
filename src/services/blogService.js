@@ -1,5 +1,5 @@
 export default class BlogService {
-  #apiBase = 'https://blog.kata.academy/api/'
+  #apiBase = 'https://blog.kata.academy/api'
 
   #token = localStorage.getItem('token') || ''
 
@@ -30,11 +30,11 @@ export default class BlogService {
   getArticles(page = 1) {
     const postsPerPage = 20
     const offset = (page - 1) * postsPerPage
-    return this.getResource(`articles/?limit=${postsPerPage}&offset=${offset}`)
+    return this.getResource(`/articles/?limit=${postsPerPage}&offset=${offset}`)
   }
 
   getArticleBySlug(slug) {
-    return this.getResource(`articles/${slug}`)
+    return this.getResource(`/articles/${slug}`)
   }
 
   async login(user) {
@@ -54,7 +54,6 @@ export default class BlogService {
   }
 
   getCurrentUser() {
-    if (this.#token) return this.getResource('/user')
-    return null
+    return this.getResource('/user')
   }
 }

@@ -64,6 +64,11 @@ export const logoutAction = () => ({
 })
 
 export const getCurrentUserAction = () => (dispatch) =>
-  blogService.getCurrentUser().then((res) => {
-    if (res) dispatch({ type: 'GET_CURRENT_USER', payload: res.user })
-  })
+  blogService
+    .getCurrentUser()
+    .then((res) => {
+      dispatch({ type: 'GET_CURRENT_USER', payload: res.user })
+    })
+    .catch((err) => {
+      dispatch({ type: 'GET_CURRENT_USER_FAILURE', payload: err.errors })
+    })

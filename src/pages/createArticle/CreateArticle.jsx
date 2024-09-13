@@ -53,8 +53,6 @@ export default function CreateArticle() {
       return
     }
 
-    // Если проверки пройдены
-    console.log('Form data:', data)
     clearErrors('tags')
     // Здесь должна быть логика отправки формы, например, через Redux или запрос к API
   }

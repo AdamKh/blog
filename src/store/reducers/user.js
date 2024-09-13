@@ -16,14 +16,18 @@ const user = (state = initialState, action) => {
       return { ...state, user: { ...action.payload }, loggedIn: true, err: null }
     case 'USER_LOGIN_FAILURE':
       return { ...state, err: action.err }
-    case 'LOGOUT':
+    case 'LOGOUT': {
+      localStorage.removeItem('token')
       return {
         ...state,
         user: {},
         loggedIn: false,
       }
+    }
     case 'GET_CURRENT_USER':
       return { ...state, user: { ...action.payload }, loggedIn: true, err: null }
+    case 'GET_CURRENT_USER_FAILURE':
+      return state
     default:
       return state
   }

@@ -1,12 +1,12 @@
-import { useLoaction, Navigate } from 'react-router-dom'
+import { useLocation, Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 export default function RequireAuth({ children }) {
-  const location = useLoaction()
-  // console.log(location)
-  const auth = false
+  const location = useLocation()
+  const { loggedIn } = useSelector((state) => state.user)
 
-  if (!auth) {
-    return <Navigate to="login" state={{ from: location }} />
+  if (!loggedIn) {
+    return <Navigate to="/sign-in" state={{ from: location }} />
   }
 
   return children
