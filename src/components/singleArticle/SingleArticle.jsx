@@ -11,7 +11,7 @@ import Tag from '../tags'
 import classes from './SingleArticle.module.scss'
 
 export default function SingleArticle({ article, articleBySlug }) {
-  const { loggedIn } = useSelector((state) => state.user)
+  const { loggedIn, user } = useSelector((state) => state.user)
 
   return (
     <article className={`${articleBySlug && classes.articleSlug} ${classes.article}`}>
@@ -58,7 +58,7 @@ export default function SingleArticle({ article, articleBySlug }) {
           <Markdown>{article.description}</Markdown>
         </p>
 
-        {articleBySlug && loggedIn && (
+        {articleBySlug && loggedIn && article.author.username === user.username && (
           <div className={classes.buttons}>
             <Button className={classes.buttonDelete}>Delete</Button>
             <Button className={classes.buttonEdit}>Edit</Button>
