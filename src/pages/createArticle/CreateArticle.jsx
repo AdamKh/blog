@@ -69,7 +69,7 @@ export default function CreateArticle() {
     }
 
     await blogService.postArticle(body)
-    navigate('/')
+    navigate('/', { replace: true })
   }
 
   return (
@@ -79,12 +79,7 @@ export default function CreateArticle() {
         <div className={classes.inputGroup}>
           <label htmlFor="title">
             <p>Title</p>
-            <input
-              id="title"
-              type="text"
-              placeholder="Title"
-              {...register('title', { required: 'Title is required' })}
-            />
+            <input id="title" type="text" placeholder="Title" {...register('title', { required: 'Required field' })} />
             {errors.title && <p className={classes.error}>{errors.title.message}</p>}
           </label>
         </div>
@@ -92,14 +87,27 @@ export default function CreateArticle() {
         <div className={classes.inputGroup}>
           <label htmlFor="shortDescription">
             <p>Short description</p>
-            <input id="shortDescription" type="text" placeholder="Title" {...register('shortDescription')} />
+            <input
+              id="shortDescription"
+              type="text"
+              placeholder="Title"
+              {...register('shortDescription', { required: 'Required field' })}
+            />
+            {errors.shortDescription && <p className={classes.error}>{errors.shortDescription.message}</p>}
           </label>
         </div>
 
         <div className={classes.inputGroup}>
           <label htmlFor="text">
             <p>Text</p>
-            <textarea id="text" type="text" placeholder="Text" rows={7} {...register('text')} />
+            <textarea
+              id="text"
+              type="text"
+              placeholder="Text"
+              rows={7}
+              {...register('text', { required: 'Required field' })}
+            />
+            {errors.text && <p className={classes.error}>{errors.text.message}</p>}
           </label>
         </div>
 

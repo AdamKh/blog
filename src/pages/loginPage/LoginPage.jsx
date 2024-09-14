@@ -31,7 +31,7 @@ export default function LoginPage() {
     const result = await dispatch(loginAction({ user: { email: data.email, password: data.password } }))
 
     if (!result.err) {
-      navigate(fromPage)
+      navigate(fromPage, { replace: true })
     }
   }
 

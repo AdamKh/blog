@@ -1,6 +1,6 @@
 import { HeartOutlined, HeartTwoTone, UserOutlined } from '@ant-design/icons'
-import { Avatar, Button } from 'antd'
-import { Link } from 'react-router-dom'
+import { Avatar, Button, Popconfirm } from 'antd'
+import { Link, useNavigate } from 'react-router-dom'
 import { format, parseISO } from 'date-fns'
 import Markdown from 'markdown-to-jsx'
 import { v4 as uuidv4 } from 'uuid'
@@ -14,6 +14,7 @@ import classes from './SingleArticle.module.scss'
 const blogService = new BlogService()
 
 export default function SingleArticle({ article, articleBySlug }) {
+  const navigate = useNavigate()
   const { loggedIn, user } = useSelector((state) => state.user)
 
   return (
@@ -63,11 +64,18 @@ export default function SingleArticle({ article, articleBySlug }) {
 
         {articleBySlug && loggedIn && article.author.username === user.username && (
           <div className={classes.buttons}>
-            <Link to="/">
-              <Button className={classes.buttonDelete} onClick={() => blogService.deleteArticle(article.slug)}>
-                Delete
-              </Button>
-            </Link>
+            <Popconfirm
+              title="Delete the article"
+              description="Are you sure to delete this article?"
+              onConfirm={() => {
+                blogService.deleteArticle(article.slug)
+                navigate('/', { replace: true })
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button className={classes.buttonDelete}>Delete</Button>
+            </Popconfirm>
             <Link to={`/articles/${article.slug}/edit`}>
               <Button className={classes.buttonEdit}>Edit</Button>
             </Link>

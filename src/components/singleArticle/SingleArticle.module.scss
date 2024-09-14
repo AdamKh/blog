@@ -184,6 +184,11 @@
   hr {
     margin: 10px 0;
   }
+
+  img {
+    margin: 10px auto;
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 1000px) {

@@ -37,7 +37,7 @@ export default function RegisterPage() {
     )
 
     if (!result.err) {
-      navigate(fromPage)
+      navigate(fromPage, { replace: true })
     }
   }
 

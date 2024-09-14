@@ -101,7 +101,13 @@ export default function EditArticle() {
             <div className={classes.inputGroup}>
               <label htmlFor="title">
                 <p>Title</p>
-                <input id="title" type="text" placeholder="Title" {...register('title')} defaultValue={article.title} />
+                <input
+                  id="title"
+                  type="text"
+                  placeholder="Title"
+                  {...register('title', { required: 'Required field' })}
+                  defaultValue={article.title}
+                />
               </label>
             </div>
 
@@ -112,7 +118,7 @@ export default function EditArticle() {
                   id="shortDescription"
                   type="text"
                   placeholder="Title"
-                  {...register('shortDescription')}
+                  {...register('shortDescription', { required: 'Required field' })}
                   defaultValue={article.description}
                 />
               </label>
@@ -126,7 +132,7 @@ export default function EditArticle() {
                   type="text"
                   placeholder="Text"
                   rows={7}
-                  {...register('text')}
+                  {...register('text', { required: 'Required field' })}
                   defaultValue={article.body}
                 />
               </label>
