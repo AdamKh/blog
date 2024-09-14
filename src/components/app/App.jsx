@@ -18,8 +18,8 @@ export default function App() {
   const articlesRequest = useSelector((state) => state.articleRequest)
 
   useEffect(() => {
-    dispatch(getArticlesRequest())
     dispatch(getCurrentUserAction())
+    dispatch(getArticlesRequest())
   }, [dispatch])
 
   return (

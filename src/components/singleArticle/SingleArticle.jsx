@@ -6,9 +6,12 @@ import Markdown from 'markdown-to-jsx'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from 'react-redux'
 
+import BlogService from '../../services/blogService'
 import Tag from '../tags'
 
 import classes from './SingleArticle.module.scss'
+
+const blogService = new BlogService()
 
 export default function SingleArticle({ article, articleBySlug }) {
   const { loggedIn, user } = useSelector((state) => state.user)
@@ -60,8 +63,14 @@ export default function SingleArticle({ article, articleBySlug }) {
 
         {articleBySlug && loggedIn && article.author.username === user.username && (
           <div className={classes.buttons}>
-            <Button className={classes.buttonDelete}>Delete</Button>
-            <Button className={classes.buttonEdit}>Edit</Button>
+            <Link to="/">
+              <Button className={classes.buttonDelete} onClick={() => blogService.deleteArticle(article.slug)}>
+                Delete
+              </Button>
+            </Link>
+            <Link to={`/articles/${article.slug}/edit`}>
+              <Button className={classes.buttonEdit}>Edit</Button>
+            </Link>
           </div>
         )}
       </div>

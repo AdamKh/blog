@@ -24,7 +24,9 @@ export default class BlogService {
       throw error
     }
 
-    return res.json()
+    if (method !== 'DELETE') return res.json()
+
+    return null
   }
 
   getArticles(page = 1) {
@@ -45,8 +47,12 @@ export default class BlogService {
     return response
   }
 
-  registerNewUser(user) {
-    return this.getResource('/users', 'POST', user)
+  async registerNewUser(user) {
+    const response = await this.getResource('/users', 'POST', user)
+    this.#token = response.user.token
+    localStorage.setItem('token', response.user.token)
+
+    return response
   }
 
   editProfile(user) {
@@ -60,5 +66,13 @@ export default class BlogService {
   async postArticle(body) {
     const res = await this.getResource('/articles', 'POST', body)
     return res
+  }
+
+  deleteArticle(slug) {
+    return this.getResource(`/articles/${slug}`, 'DELETE')
+  }
+
+  editArticle(slug, body) {
+    return this.getResource(`/articles/${slug}`, 'PUT', body)
   }
 }

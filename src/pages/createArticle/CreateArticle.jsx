@@ -1,9 +1,6 @@
-// import { useEffect } from 'react'
 import { Button } from 'antd'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-// import { useDispatch, useSelector } from 'react-redux'
-// import { useParams } from 'react-router-dom'
 
 import BlogService from '../../services/blogService'
 
@@ -55,7 +52,7 @@ export default function CreateArticle() {
     if (emptyTag) {
       setError('tags', {
         type: 'manual',
-        message: '"Tag is required! If you don\'t want to provide the Tag, please delete the tag before sending form"',
+        message: "Tag is required! If you don't want to provide the Tag, please delete the tag before sending form",
       })
       return
     }
@@ -82,7 +79,13 @@ export default function CreateArticle() {
         <div className={classes.inputGroup}>
           <label htmlFor="title">
             <p>Title</p>
-            <input id="title" type="text" placeholder="Title" {...register('title')} />
+            <input
+              id="title"
+              type="text"
+              placeholder="Title"
+              {...register('title', { required: 'Title is required' })}
+            />
+            {errors.title && <p className={classes.error}>{errors.title.message}</p>}
           </label>
         </div>
 
@@ -103,25 +106,37 @@ export default function CreateArticle() {
         <div className={`${classes.inputGroup} ${classes.tags}`}>
           <p>Tags</p>
           {fields.map((field, index) => (
-            <div key={field.id} className={classes.tagWrapper}>
-              <input
-                type="text"
-                placeholder="Tag"
-                {...register(`tags.${index}.value`, {
-                  required: 'Tag is required!',
-                })}
-              />
+            <>
+              <div key={field.id} className={classes.tagWrapper}>
+                <input
+                  type="text"
+                  placeholder="Tag"
+                  {...register(`tags.${index}.value`, {
+                    required:
+                      'Tag is required!' +
+                      " If you don't want to provide the Tag, please delete the tag before sending form",
+                  })}
+                />
 
-              <Button danger onClick={() => remove(index)} className={classes.deleteTagButton}>
-                Delete
-              </Button>
-
-              {index === fields.length - 1 && (
-                <Button onClick={() => append({ value: '' })} className={classes.addTagButton}>
-                  Add tag
+                <Button
+                  danger
+                  className={classes.deleteTagButton}
+                  onClick={() => {
+                    remove(index)
+                    clearErrors('tags')
+                  }}
+                >
+                  Delete
                 </Button>
-              )}
-            </div>
+
+                {index === fields.length - 1 && (
+                  <Button onClick={() => append({ value: '' })} className={classes.addTagButton}>
+                    Add tag
+                  </Button>
+                )}
+              </div>
+              {errors.tags?.[index]?.value && <p className={classes.error}>{errors.tags[index].value.message}</p>}
+            </>
           ))}
           {fields.length === 0 && (
             <Button onClick={() => append({ value: '' })} className={classes.addTagButton}>
