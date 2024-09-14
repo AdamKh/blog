@@ -113,7 +113,7 @@ export default function CreateArticle() {
                   placeholder="Tag"
                   {...register(`tags.${index}.value`, {
                     required:
-                      'Tag is required!' +
+                      "Tag shoudn't be empty!" +
                       " If you don't want to provide the Tag, please delete the tag before sending form",
                   })}
                 />
