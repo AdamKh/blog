@@ -75,4 +75,12 @@ export default class BlogService {
   editArticle(slug, body) {
     return this.getResource(`/articles/${slug}`, 'PUT', body)
   }
+
+  like(slug) {
+    return this.getResource(`/articles/${slug}/favorite`, 'POST')
+  }
+
+  unlike(slug) {
+    return this.getResource(`/articles/${slug}/favorite`, 'DELETE')
+  }
 }

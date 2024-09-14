@@ -5,6 +5,7 @@ import { format, parseISO } from 'date-fns'
 import Markdown from 'markdown-to-jsx'
 import { v4 as uuidv4 } from 'uuid'
 import { useSelector } from 'react-redux'
+import { useState } from 'react'
 
 import BlogService from '../../services/blogService'
 import Tag from '../tags'
@@ -16,6 +17,21 @@ const blogService = new BlogService()
 export default function SingleArticle({ article, articleBySlug }) {
   const navigate = useNavigate()
   const { loggedIn, user } = useSelector((state) => state.user)
+
+  const [favorited, setFavorited] = useState(article.favorited)
+  const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount)
+
+  const handleLike = async () => {
+    if (!favorited) {
+      await blogService.like(article.slug)
+      setFavorited(true)
+      setFavoritesCount(favoritesCount + 1)
+    } else {
+      await blogService.unlike(article.slug)
+      setFavorited(false)
+      setFavoritesCount(favoritesCount - 1)
+    }
+  }
 
   return (
     <article className={`${articleBySlug && classes.articleSlug} ${classes.article}`}>
@@ -29,16 +45,10 @@ export default function SingleArticle({ article, articleBySlug }) {
                 {article.title}
               </Link>
             )}
-            {!article.favorited && (
-              <span>
-                <HeartOutlined /> {article.favoritesCount}
-              </span>
-            )}
-            {article.favorited && (
-              <span>
-                <HeartTwoTone twoToneColor="#FF0707" /> {article.favoritesCount}
-              </span>
-            )}
+            <button type="button" onClick={handleLike} className={classes.buttonLike}>
+              {favorited ? <HeartTwoTone twoToneColor="#FF0707" /> : <HeartOutlined />}
+              {favoritesCount}
+            </button>
           </div>
           <div className={classes.leftBottom}>
             {article.tagList.map((tag) => (
