@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
 
+import * as pathes from '../../constants/pathes'
 import { createNewUserAction } from '../../store/actions'
 
 import classes from './RegisterPage.module.scss'
@@ -11,11 +12,24 @@ import classes from './RegisterPage.module.scss'
 export default function RegisterPage() {
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
+  const { loggedIn, err: errors } = useSelector((state) => state.user)
 
   const fromPage = location.state?.from?.pathname || '/'
 
-  const { err: errors } = useSelector((state) => state.user)
-  const dispatch = useDispatch()
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(fromPage, {
+        replace: true,
+        state: {
+          notification: {
+            message: 'You already logged in!',
+            description: 'Log out of your current account to log in to another one',
+          },
+        },
+      })
+    }
+  }, [fromPage, loggedIn, navigate])
 
   const [errorClasses, setErrorClasses] = useState({
     username: '',
@@ -154,7 +168,7 @@ export default function RegisterPage() {
         <footer className={classes.footer}>
           <p>
             Already have an account?{' '}
-            <Link className={classes.Link} to="/sign-in">
+            <Link className={classes.Link} to={pathes.signInPath}>
               Sign In
             </Link>
             .

@@ -1,9 +1,10 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from 'classnames'
 import { useDispatch, useSelector } from 'react-redux'
 
+import * as pathes from '../../constants/pathes'
 import { loginAction } from '../../store/actions'
 
 import classes from './LoginPage.module.scss'
@@ -12,9 +13,23 @@ export default function LoginPage() {
   const navigate = useNavigate()
   const location = useLocation()
   const dispatch = useDispatch()
-  const { err: errors } = useSelector((state) => state.user)
+  const { loggedIn, err: errors } = useSelector((state) => state.user)
 
   const fromPage = location.state?.from?.pathname || '/'
+
+  useEffect(() => {
+    if (loggedIn) {
+      navigate(fromPage, {
+        replace: true,
+        state: {
+          notification: {
+            message: 'You already logged in!',
+            description: 'Log out of your current account to log in to another one',
+          },
+        },
+      })
+    }
+  }, [fromPage, loggedIn, navigate])
 
   const [errorClasses, setErrorClasses] = useState({
     email: '',
@@ -99,7 +114,7 @@ export default function LoginPage() {
         <footer className={classes.footer}>
           <p>
             Don’t have an account?{' '}
-            <Link className={classes.Link} to="/sign-up">
+            <Link className={classes.Link} to={pathes.signUpPath}>
               Sign Up
             </Link>
             .

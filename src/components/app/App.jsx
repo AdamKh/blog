@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
+import * as pathes from '../../constants/pathes'
 import Layout from '../layout'
 import ArticleList from '../../pages/articlesList'
 import ArticleBySlug from '../../pages/articleBySlug'
@@ -11,7 +12,8 @@ import EditProfile from '../../pages/editProfile'
 import RequireAuth from '../../hoc/RequireAuth'
 import CreateArticle from '../../pages/createArticle'
 import EditArticle from '../../pages/editArticle'
-import { getArticlesRequest, getCurrentUserAction } from '../../store/actions/index'
+import NotFoundPage from '../../pages/notFoundPage'
+import { getCurrentUserAction } from '../../store/actions/index'
 
 export default function App() {
   const dispatch = useDispatch()
@@ -19,17 +21,16 @@ export default function App() {
 
   useEffect(() => {
     dispatch(getCurrentUserAction())
-    dispatch(getArticlesRequest())
   }, [dispatch])
 
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Navigate to="/articles" replace />} />
-        <Route path="articles" element={<ArticleList articlesRequest={articlesRequest} />} />
-        <Route path="articles/:slug" element={<ArticleBySlug />} />
+        <Route index element={<Navigate to={pathes.articlesPath} replace />} />
+        <Route path={pathes.articlesPath} element={<ArticleList articlesRequest={articlesRequest} />} />
+        <Route path={pathes.articleBySlugPath} element={<ArticleBySlug />} />
         <Route
-          path="new-article"
+          path={pathes.newArticlePath}
           element={
             <RequireAuth>
               <CreateArticle />
@@ -37,16 +38,24 @@ export default function App() {
           }
         />
         <Route
-          path="articles/:slug/edit"
+          path={pathes.articleEditPath}
           element={
             <RequireAuth>
               <EditArticle />
             </RequireAuth>
           }
         />
-        <Route path="sign-in" element={<LoginPage />} />
-        <Route path="sign-up" element={<RegisterPage />} />
-        <Route path="profile" element={<EditProfile />} />
+        <Route path={pathes.signInPath} element={<LoginPage />} />
+        <Route path={pathes.signUpPath} element={<RegisterPage />} />
+        <Route
+          path={pathes.profilePath}
+          element={
+            <RequireAuth>
+              <EditProfile />
+            </RequireAuth>
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
       </Route>
     </Routes>
   )

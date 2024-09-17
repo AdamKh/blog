@@ -22,6 +22,7 @@ export default function SingleArticle({ article, articleBySlug }) {
   const [favoritesCount, setFavoritesCount] = useState(article.favoritesCount)
 
   const handleLike = async () => {
+    if (!loggedIn) return
     if (!favorited) {
       await blogService.like(article.slug)
       setFavorited(true)

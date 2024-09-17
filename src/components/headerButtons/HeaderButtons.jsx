@@ -3,6 +3,7 @@ import { Button, Avatar } from 'antd'
 import { UserOutlined } from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux'
 
+import * as pathes from '../../constants/pathes'
 import { logoutAction } from '../../store/actions'
 
 import classes from './HeaderButtons.module.scss'
@@ -15,12 +16,12 @@ export default function HeaderButtons() {
     <div className={classes.links}>
       {!loggedIn && (
         <>
-          <Link to="/sign-in" className={classes.link}>
+          <Link to={pathes.signInPath} className={classes.link}>
             <Button className={classes.button} type="text">
               Sign in
             </Button>
           </Link>
-          <Link to="/sign-up" className={classes.link}>
+          <Link to={pathes.signUpPath} className={classes.link}>
             <Button className={`${classes.button} ${classes.buttonSuccess}`}>Sign up</Button>
           </Link>
         </>
@@ -28,12 +29,12 @@ export default function HeaderButtons() {
 
       {loggedIn && (
         <div className={classes.buttonsWrapper}>
-          <Link to="/new-article" className={classes.link}>
+          <Link to={pathes.newArticlePath} className={classes.link}>
             <Button className={`${classes.button} ${classes.buttonSuccess} ${classes.buttonCreateArticle}`}>
               Create article
             </Button>
           </Link>
-          <Link to="/profile" className={`${classes.link} ${classes.profile}`}>
+          <Link to={pathes.profilePath} className={`${classes.link} ${classes.profile}`}>
             <p className={classes.username}>{user.username}</p>
             <Avatar size={48} src={user.image} icon={<UserOutlined />} />
           </Link>
