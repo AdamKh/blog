@@ -1,5 +1,5 @@
 export default class BlogService {
-  #apiBase = 'https://blog.kata.academy/api'
+  #apiBase = 'https://blog-platform.kata.academy/api'
 
   #token = localStorage.getItem('token') || ''
 
